@@ -5,8 +5,14 @@ import {
   botToken,
   botStartMessage,
   botOfferMessage,
-  seeValuesInlineKeyboard,
-  valuesInlineKeyboard,
+  seeVipValues,
+  vipValues,
+  monthlyValue,
+  monthlySelected,
+  quarterSelected,
+  quarterValue,
+  semesterSelected,
+  semesterValue,
 } from "./messagesAndToken";
 
 const bot = new Bot(botToken);
@@ -15,7 +21,7 @@ bot.command(
   "start",
   async (ctx) =>
     await ctx.reply(`${botStartMessage}`, {
-      reply_markup: seeValuesInlineKeyboard,
+      reply_markup: seeVipValues,
     })
 );
 
@@ -24,8 +30,24 @@ bot.on("message", async (ctx) => {
 
   const chatId = message.chat.id;
   await bot.api.sendMessage(chatId, `${botOfferMessage}`, {
-    reply_markup: valuesInlineKeyboard,
+    reply_markup: vipValues,
   });
+});
+
+bot.callbackQuery("values", async (ctx) => {
+  await ctx.reply(`${botOfferMessage}`, { reply_markup: vipValues });
+});
+
+bot.callbackQuery("monthly", async (ctx) => {
+  await ctx.reply(`${monthlySelected}`, { reply_markup: monthlyValue });
+});
+
+bot.callbackQuery("quarter", async (ctx) => {
+  await ctx.reply(`${quarterSelected}`, { reply_markup: quarterValue });
+});
+
+bot.callbackQuery("semester", async (ctx) => {
+  await ctx.reply(`${semesterSelected}`, { reply_markup: semesterValue });
 });
 
 bot.start();
